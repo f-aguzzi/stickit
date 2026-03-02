@@ -5,7 +5,7 @@
 #ifndef FILE_H
 #define FILE_H
 
-inline void
+static inline void
 helper_file_save(FILE *fp, note *p)
 {
     for (int i = 0; i < D_NOTE; i++)

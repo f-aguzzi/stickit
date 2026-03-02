@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "config.h"
 #include "tigr/tigr.h"
 #include "font.h"
@@ -32,7 +31,7 @@ edit_notes(Tigr* bmp, note p[], int sx, int *edit_state, int press_state[], int 
     if (*active != 8) {
         if (left_pressed != 0 && *cursor_pos > 0)
             *cursor_pos -= 1;
-        else if (right_pressed != 0 && *cursor_pos <= strlen(p[sx].text[*active]))
+        else if (right_pressed != 0 && *cursor_pos < strlen(p[sx].text[*active]))
             *cursor_pos += 1;
         else if (backspace_pressed) {
             if (*cursor_pos > 0) {

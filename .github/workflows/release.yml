@@ -36,13 +36,13 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            artifact_name: stickit
+            artifact_name: stickit-linux
             asset_name: stickit-linux
           - os: windows-latest
-            artifact_name: stickit.exe
+            artifact_name: stickit-windows.exe
             asset_name: stickit-windows.exe
           - os: macos-latest
-            artifact_name: stickit
+            artifact_name: stickit-macos
             asset_name: stickit-macos
 
     runs-on: ${{ matrix.os }}
@@ -52,7 +52,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ needs.version.outputs.version }} # build
+          ref: ${{ needs.version.outputs.version }}
+          submodules: recursive
 
       - name: Install Linux dependencies
         if: runner.os == 'Linux'
