@@ -1,0 +1,70 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  # Determine version and tag
+  version:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      version: ${{ steps.bump.outputs.version }}
+      skipped: ${{ steps.bump.outputs.skipped }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Determine and tag version
+        id: bump
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          chmod +x .github/scripts/version.sh
+          .github/scripts/version.sh
+
+  # Matrix build
+  build:
+    needs: version
+    if: needs.version.outputs.skipped != 'true'
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            artifact_name: stickit
+            asset_name: stickit-linux
+          - os: windows-latest
+            artifact_name: stickit.exe
+            asset_name: stickit-windows.exe
+          - os: macos-latest
+            artifact_name: stickit
+            asset_name: stickit-macos
+
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.version.outputs.version }} # build
+
+      - name: Install Linux dependencies
+        if: runner.os == 'Linux'
+        run: sudo apt-get install -y gcc make libglu1-mesa-dev libgl1-mesa-dev libx11-dev
+
+      - name: Build
+        run: make
+
+      - name: Upload binary to release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          gh release upload ${{ needs.version.outputs.version }} \
+            ${{ matrix.artifact_name }}#${{ matrix.asset_name }}

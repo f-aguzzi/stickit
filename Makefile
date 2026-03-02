@@ -1,6 +1,7 @@
 CFLAGS += -I../..
 ifeq ($(OS),Windows_NT)
 	LDFLAGS += -s -lopengl32 -lgdi32
+	TARGET = stickit.exe
 else
 	UNAME_S := $(shell uname -s)
 	ifeq ($(UNAME_S),Darwin)
@@ -8,7 +9,8 @@ else
 	else ifeq ($(UNAME_S),Linux)
 		LDFLAGS += -s -lGLU -lGL -lX11
 	endif
+	TARGET = stickit
 endif
 
-stickit : main.c tigr/tigr.c
+$(TARGET) : main.c tigr/tigr.c
 	gcc $^ -O3 -o $@ $(CFLAGS) $(LDFLAGS)
