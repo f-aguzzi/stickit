@@ -128,7 +128,8 @@ draw_char(Tigr *bmp, char c, int x, int y, int size, TPixel fg)
 static void
 draw_text(Tigr *bmp, const char *s, int x, int y, int size, TPixel fg)
 {
-    for (; *s; s++, x += CELL_W) draw_char(bmp, *s, x, y, size, fg);
+    for (; *s; s++, x += CELL_W)
+        draw_char(bmp, *s, x, y, size, fg);
 }
 
 static void

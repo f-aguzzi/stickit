@@ -37,19 +37,17 @@ edit_notes(Tigr* bmp, note p[], int sx, int *edit_state, int press_state[], int 
             if (*cursor_pos > 0) {
                 int i=0, len = strlen(p[sx].text[*active]);
                 *cursor_pos -= 1;
-                for (; i < *cursor_pos; i++) {
+                for (; i < *cursor_pos; i++)
                     temp[i] = p[sx].text[*active][i];
-                }
-                for (; i < len; i++) {
+                for (; i < len; i++)
                     temp[i] = p[sx].text[*active][i+1];
-                }
                 temp[i] = '\0';
                 strcpy(p[sx].text[*active], temp);
             }
         } else if (enter_pressed) {
             *active = 8;
             *cursor_pos = 0;
-        } else if ((text != 0 || space_pressed) && *cursor_pos < 12 /*&& strlen(p[sx].text[*active]) < 12*/) {
+        } else if ((text != 0 || space_pressed) && *cursor_pos < 12) {
             if (space_pressed)
                 text = ' ';
 
@@ -85,8 +83,6 @@ main(int argc, char* argv[])
     note_init(p4);
     file_load(p1, p2, p3, p4);
 
-    /* int show_cow = 0; */
-
     /* state */
     int prev_state1 = 0, next_state1 = 0, sx1 = 0;
     int prev_state2 = 0, next_state2 = 0, sx2 = 0;
@@ -103,19 +99,6 @@ main(int argc, char* argv[])
     Tigr* screen = tigrWindow(270, 320, "Hello", TIGR_FIXED);
     while (!tigrClosed(screen) && !tigrKeyDown(screen, TK_ESCAPE)) {
         tigrClear(screen, COL_BG);
-        /*
-        int cow = draw_button(screen, "SHOW COW SOUND", 120, 150, 100, 40);
-        if (cow)
-        {
-            show_cow = 1;
-        }
-        if (show_cow)
-        {
-            const char *text = "MOOOOOOOOO!";
-            draw_text(screen, text, 121, 111, FONT_SCALE, tigrRGB(0x6a, 0x6a, 0x6a));
-            draw_text(screen, text, 120, 110, FONT_SCALE, COL_BORDER);
-        }
-        */
 
         /* variables */
         int save = 0, load = 0;
@@ -142,15 +125,15 @@ main(int argc, char* argv[])
         } else if (save_state) {
             file_save(p1, p2, p3, p4);
             save_state = 0;
-        } else if (edit1_state) {
+        } else if (edit1_state)
             edit_notes(screen, p1, sx1, &edit1_state, press_state, &cursor_pos, &active);
-        } else if (edit2_state) {
+        else if (edit2_state)
             edit_notes(screen, p2, sx2, &edit2_state, press_state, &cursor_pos, &active);
-        } else if (edit3_state) {
+        else if (edit3_state)
             edit_notes(screen, p3, sx3, &edit3_state, press_state, &cursor_pos, &active);
-        } else if (edit4_state) {
+        else if (edit4_state)
             edit_notes(screen, p4, sx4, &edit4_state, press_state, &cursor_pos, &active);
-        } else {
+        else {
             draw_note_panel(screen, p1, &prev_state1, &next_state1, &sx1, 10, 40);
             draw_note_panel(screen, p2, &prev_state2, &next_state2, &sx2, 140, 40);
             draw_note_panel(screen, p3, &prev_state3, &next_state3, &sx3, 10, 180);

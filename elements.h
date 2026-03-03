@@ -73,8 +73,7 @@ draw_note(Tigr *bmp, int x, int y, note p)
 static void
 draw_notes(Tigr *bmp, int x, int y, int number, note *notes, int first, int last)
 {
-    for (int i = last; i >= first ; i--)
-    {
+    for (int i = last; i >= first ; i--) {
         draw_note(bmp, x+i*O_NOTE, y-i*O_NOTE, notes[i]);
     }
 }
@@ -160,21 +159,10 @@ edit_menu(Tigr *bmp, note *p, int x_offset, int y_offset, int *press_state, int 
     if (back & 1)
         return 1;
 
-    HANDLE_BUTTON_PRESS(0, p, press_state, c);
-    HANDLE_BUTTON_PRESS(1, p, press_state, c);
-    HANDLE_BUTTON_PRESS(2, p, press_state, c);
-    HANDLE_BUTTON_PRESS(3, p, press_state, c);
-    HANDLE_BUTTON_PRESS(4, p, press_state, c);
-    HANDLE_BUTTON_PRESS(5, p, press_state, c);
-    HANDLE_BUTTON_PRESS(6, p, press_state, c);
-
-    HANDLE_TEXTBOX_PRESS(0, text_press_state, t, active);
-    HANDLE_TEXTBOX_PRESS(1, text_press_state, t, active);
-    HANDLE_TEXTBOX_PRESS(2, text_press_state, t, active);
-    HANDLE_TEXTBOX_PRESS(3, text_press_state, t, active);
-    HANDLE_TEXTBOX_PRESS(4, text_press_state, t, active);
-    HANDLE_TEXTBOX_PRESS(5, text_press_state, t, active);
-    HANDLE_TEXTBOX_PRESS(6, text_press_state, t, active);
+    for (int i = 0; i < 7; i++) {
+        HANDLE_BUTTON_PRESS(i, p, press_state, c);
+        HANDLE_TEXTBOX_PRESS(0, text_press_state, t, active);
+    }
 
     for (int i = 0; i < 7; i++) {
         press_state[i] = c[i];
