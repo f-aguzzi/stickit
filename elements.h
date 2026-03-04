@@ -19,7 +19,7 @@
     if ((c[button_index] & 1) && !press_state[button_index]) { \
         press_state[button_index] = 1; \
         *active = button_index; \
-        *cursor_pos = 0; \
+        *cursor_pos = strlen(p->text[button_index]); \
         return 3; \
     }
 
