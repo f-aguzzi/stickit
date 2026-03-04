@@ -15,3 +15,6 @@ endif
 
 $(TARGET): main.c tigr/tigr.c
 	gcc $^ -O3 -s -o $@ $(CFLAGS) $(LDFLAGS)
+
+$(TARGET)-debug: main.c tigr/tigr.c
+	gcc $^ -g -o $@ $(CFLAGS) $(LDFLAGS)

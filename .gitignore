@@ -37,6 +37,7 @@
 *.hex
 stickit
 stickit-linux
+stickit-linux-debug
 
 # Debug files
 *.dSYM/
