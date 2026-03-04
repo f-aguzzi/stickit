@@ -161,7 +161,7 @@ edit_menu(Tigr *bmp, note *p, int x_offset, int y_offset, int *press_state, int 
 
     for (int i = 0; i < 7; i++) {
         HANDLE_BUTTON_PRESS(i, p, press_state, c);
-        HANDLE_TEXTBOX_PRESS(0, text_press_state, t, active);
+        HANDLE_TEXTBOX_PRESS(i, text_press_state, t, active);
     }
 
     for (int i = 0; i < 7; i++) {
