@@ -14,4 +14,4 @@ else
 endif
 
 $(TARGET): main.c tigr/tigr.c
-	gcc $^ -O3 -o $@ $(CFLAGS) $(LDFLAGS)
+	gcc $^ -O3 -s -o $@ $(CFLAGS) $(LDFLAGS)
