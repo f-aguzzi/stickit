@@ -81,7 +81,7 @@ main(int argc, char* argv[])
     note_init(p2);
     note_init(p3);
     note_init(p4);
-    file_load(p1, p2, p3, p4);
+    file_load("save.stickit", p1, p2, p3, p4);
 
     /* state */
     int prev_state1 = 0, next_state1 = 0, sx1 = 0;
@@ -120,10 +120,10 @@ main(int argc, char* argv[])
         /* lower panel */
         draw_panel(screen, 0, 31, 269, 288);
         if (load_state) {
-            file_load(p1, p2, p3, p4);
+            file_load("save.stickit", p1, p2, p3, p4);
             load_state = 0;
         } else if (save_state) {
-            file_save(p1, p2, p3, p4);
+            file_save("save.stickit", p1, p2, p3, p4);
             save_state = 0;
         } else if (edit1_state)
             edit_notes(screen, p1, sx1, &edit1_state, press_state, &cursor_pos, &active);
@@ -161,6 +161,6 @@ main(int argc, char* argv[])
     }
 
     tigrFree(screen);
-    file_save(p1, p2, p3, p4);
+    file_save("save.stickit", p1, p2, p3, p4);
     return 0;
 }

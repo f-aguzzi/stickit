@@ -14,10 +14,10 @@ helper_file_save(FILE *fp, note *p)
 }
 
 void
-file_save(note *p1, note *p2, note *p3, note *p4)
+file_save(char *filename, note *p1, note *p2, note *p3, note *p4)
 {
     FILE *fp;
-    fp = fopen("save.stickit", "w");
+    fp = fopen(filename, "w");
 
     helper_file_save(fp, p1);
     helper_file_save(fp, p2);
@@ -44,10 +44,10 @@ helper_file_load(FILE *fp, note *p)
 }
 
 void
-file_load(note *p1, note *p2, note *p3, note *p4)
+file_load(char *filename, note *p1, note *p2, note *p3, note *p4)
 {
     FILE *fp;
-    fp = fopen("save.stickit", "r");
+    fp = fopen(filename, "r");
 
     if (fp == 0)
         return;
