@@ -56,3 +56,5 @@ dkms.conf
 
 # Executable-generated files
 *.stickit
+stickit-linux-dev
+dev

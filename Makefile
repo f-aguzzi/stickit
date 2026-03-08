@@ -18,3 +18,6 @@ $(TARGET): main.c tigr/tigr.c
 
 $(TARGET)-debug: main.c tigr/tigr.c
 	gcc $^ -g -o $@ $(CFLAGS) $(LDFLAGS)
+
+dev: main.c tigr/tigr.c
+	tcc $^ -Os -o $@ $(CFLAGS) $(LDFLAGS) && ./dev
