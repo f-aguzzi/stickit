@@ -24,7 +24,7 @@ typedef struct {
     int text;
 } pressed_buttons;
 
-inline int
+static inline int
 read_keys(int *cursor_pos, pressed_buttons pb, char *str, char *temp)
 {
     if (pb.left_pressed != 0 && *cursor_pos > 0)

@@ -3,6 +3,7 @@
 #include "font.h"
 #include "elements.h"
 #include "file.h"
+#include "util.h"
 
 static inline void
 edit_notes(Tigr* bmp, note p[], int sx, int *edit_state, int press_state[], int *cursor_pos, int *active)
@@ -26,7 +27,7 @@ edit_notes(Tigr* bmp, note p[], int sx, int *edit_state, int press_state[], int 
     pb.right_pressed = tigrKeyDown(bmp, TK_RIGHT);
     pb.backspace_pressed = tigrKeyDown(bmp, TK_BACKSPACE);
     pb.space_pressed = tigrKeyDown(bmp, TK_SPACE);
-    pb.enter_pressed = tigrKeyDown(bmp, TK_PADENTER);
+    pb.enter_pressed = tigrKeyDown(bmp, TK_PADENTER) || tigrKeyDown(bmp, TK_RETURN);
     pb.text = tigrReadChar(bmp);
     char temp[13];
 
