@@ -20,56 +20,23 @@ edit_notes(Tigr* bmp, note p[], int sx, int *edit_state, int press_state[], int 
         break;
     }
 
-    int left_pressed = tigrKeyDown(bmp, TK_LEFT);
-    int right_pressed = tigrKeyDown(bmp, TK_RIGHT);
-    int backspace_pressed = tigrKeyDown(bmp, TK_BACKSPACE);
-    int space_pressed = tigrKeyDown(bmp, TK_SPACE);
-    int enter_pressed = tigrKeyDown(bmp, TK_PADENTER);
-    int text = tigrReadChar(bmp);
+    pressed_buttons pb;
+
+    pb.left_pressed = tigrKeyDown(bmp, TK_LEFT);
+    pb.right_pressed = tigrKeyDown(bmp, TK_RIGHT);
+    pb.backspace_pressed = tigrKeyDown(bmp, TK_BACKSPACE);
+    pb.space_pressed = tigrKeyDown(bmp, TK_SPACE);
+    pb.enter_pressed = tigrKeyDown(bmp, TK_PADENTER);
+    pb.text = tigrReadChar(bmp);
     char temp[13];
 
     if (*active != 8) {
-        if (left_pressed != 0 && *cursor_pos > 0)
-            *cursor_pos -= 1;
-        else if (right_pressed != 0 && *cursor_pos < strlen(p[sx].text[*active]))
-            *cursor_pos += 1;
-        else if (backspace_pressed) {
-            if (*cursor_pos > 0) {
-                int i=0, len = strlen(p[sx].text[*active]);
-                *cursor_pos -= 1;
-                for (; i < *cursor_pos; i++)
-                    temp[i] = p[sx].text[*active][i];
-                for (; i < len; i++)
-                    temp[i] = p[sx].text[*active][i+1];
-                temp[i] = '\0';
-                strcpy(p[sx].text[*active], temp);
-            }
-        } else if (enter_pressed) {
+        int read_value = read_keys(cursor_pos, pb, p[sx].text[*active], temp);
+        if (read_value == 1) {
             *active = 8;
             *cursor_pos = 0;
-        } else if ((text != 0 || space_pressed) && *cursor_pos < 12) {
-            if (space_pressed)
-                text = ' ';
-
-            int i, split, len = strlen(p[sx].text[*active]);
-            split = *cursor_pos > len ? *cursor_pos-1 : *cursor_pos;
-
-            for (i = 0; i <= split; i++)
-                temp[i] = p[sx].text[*active][i];
-
-            temp[split] = text;
-            split += 1;
-
-            for (i = split; i <= len+1; i++)
-                temp[i] = p[sx].text[*active][i-1];
-
-            strcpy(p[sx].text[*active], temp);
-            *cursor_pos +=1;
-        } else {
-
         }
     }
-
 }
 
 int
