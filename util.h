@@ -4,6 +4,8 @@
 #ifndef UTIL_H
 #define UTIL_H
 
+#define CLEAR_ARRAY(x, len) for(int cla = 0; cla < len; cla++) x[cla] = 0;
+
 inline int
 detect_click(Tigr* bmp, int sx, int dx, int tp, int bm)
 {

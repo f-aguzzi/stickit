@@ -128,15 +128,14 @@ draw_note_panel(Tigr *bmp, note *notes, int *prev_state, int *next_state, int *s
 int
 edit_menu(Tigr *bmp, note *p, int x_offset, int y_offset, int *press_state, int *cursor_pos, int *active)
 {
-    int back = 0, c[7], t[7];
-    for (int i = 0; i < 7; i++) {
-        c[i] = 0;
-        t[i] = 0;
-    }
-
-    int *text_press_state = &press_state[7];
-
     char number[3];
+    int back = 0, c[7], t[7], *text_press_state;
+
+    CLEAR_ARRAY(c, 7)
+    CLEAR_ARRAY(t, 7)
+
+    text_press_state = &press_state[7];
+
     number[1] = '.';
     number[2] = '\0';
     char cross[2] = "X";
@@ -175,8 +174,16 @@ edit_menu(Tigr *bmp, note *p, int x_offset, int y_offset, int *press_state, int 
 static inline void
 edit_notes(Tigr* bmp, note p[], int sx, int *edit_state, int press_state[], int *cursor_pos, int *active)
 {
-    note tmp = p[sx];
-    int ret = edit_menu(bmp, &tmp, (270-100)/2, 33, press_state, cursor_pos, active);
+    note tmp;
+    int ret;
+    char temp[13];
+    pressed_buttons pb;
+
+    CLEAR_ARRAY(temp, 13)
+
+    tmp = p[sx];
+
+    ret = edit_menu(bmp, &tmp, (270-100)/2, 33, press_state, cursor_pos, active);
     switch(ret) {
         case 1:
         *edit_state = 0;
@@ -188,15 +195,12 @@ edit_notes(Tigr* bmp, note p[], int sx, int *edit_state, int press_state[], int 
         break;
     }
 
-    pressed_buttons pb;
-
     pb.left_pressed = tigrKeyDown(bmp, TK_LEFT);
     pb.right_pressed = tigrKeyDown(bmp, TK_RIGHT);
     pb.backspace_pressed = tigrKeyDown(bmp, TK_BACKSPACE);
     pb.space_pressed = tigrKeyDown(bmp, TK_SPACE);
     pb.enter_pressed = tigrKeyDown(bmp, TK_PADENTER) || tigrKeyDown(bmp, TK_RETURN);
     pb.text = tigrReadChar(bmp);
-    char temp[13];
 
     if (*active != 8) {
         int read_value = read_keys(cursor_pos, pb, p[sx].text[*active], temp);
@@ -213,6 +217,8 @@ save_menu(Tigr *bmp, char *filepath, int *cursor_pos)
     char temp[50];
     int return_value = 0, back_pressed = 0;
     pressed_buttons pb;
+
+    CLEAR_ARRAY(temp, 50)
 
     draw_text(bmp, "SAVE AS...", 100, 45, 1, COL_BORDER);
     draw_textbox(bmp, filepath, 1, *cursor_pos, 10, 150, 250, 20);
@@ -240,6 +246,8 @@ load_menu(Tigr *bmp, char *filepath, int *cursor_pos)
     char temp[50];
     int return_value = 0, back_pressed = 0;
     pressed_buttons pb;
+
+    CLEAR_ARRAY(temp, 50)
 
     draw_text(bmp, "LOAD FROM...", 100, 45, 1, COL_BORDER);
     draw_textbox(bmp, filepath, 1, *cursor_pos, 10, 150, 250, 20);

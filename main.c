@@ -20,10 +20,10 @@ main(int argc, char* argv[])
     int save_as_state = 0, load_from_state = 0;
     int edit1_state = 0, edit2_state = 0, edit3_state = 0, edit4_state = 0;
     int press_state[14];
-    for (int i = 0; i < 14; i++)
-        press_state[i] = 0;
     int cursor_pos = 0, active = 8;
     char filepath[50] = "save.stickit";
+
+    CLEAR_ARRAY(press_state, 14)
 
     note_init(p1);
     note_init(p2);
