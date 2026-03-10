@@ -5,41 +5,6 @@
 #include "file.h"
 #include "util.h"
 
-static inline void
-edit_notes(Tigr* bmp, note p[], int sx, int *edit_state, int press_state[], int *cursor_pos, int *active)
-{
-    note tmp = p[sx];
-    int ret = edit_menu(bmp, &tmp, (270-100)/2, 33, press_state, cursor_pos, active);
-    switch(ret) {
-        case 1:
-        *edit_state = 0;
-        *cursor_pos = 0;
-        *active = 8;
-        break;
-        case 2:
-        p[sx] = tmp;
-        break;
-    }
-
-    pressed_buttons pb;
-
-    pb.left_pressed = tigrKeyDown(bmp, TK_LEFT);
-    pb.right_pressed = tigrKeyDown(bmp, TK_RIGHT);
-    pb.backspace_pressed = tigrKeyDown(bmp, TK_BACKSPACE);
-    pb.space_pressed = tigrKeyDown(bmp, TK_SPACE);
-    pb.enter_pressed = tigrKeyDown(bmp, TK_PADENTER) || tigrKeyDown(bmp, TK_RETURN);
-    pb.text = tigrReadChar(bmp);
-    char temp[13];
-
-    if (*active != 8) {
-        int read_value = read_keys(cursor_pos, pb, p[sx].text[*active], temp);
-        if (read_value == 1) {
-            *active = 8;
-            *cursor_pos = 0;
-        }
-    }
-}
-
 int
 main(int argc, char* argv[])
 {
