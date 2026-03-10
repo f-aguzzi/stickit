@@ -8,15 +8,10 @@
 int
 main(int argc, char* argv[])
 {
+    /* state */
     note p1[D_NOTE], p2[D_NOTE], p3[D_NOTE], p4[D_NOTE];
     note tmp1[D_NOTE], tmp2[D_NOTE], tmp3[D_NOTE], tmp4[D_NOTE];
-    note_init(p1);
-    note_init(p2);
-    note_init(p3);
-    note_init(p4);
-    file_load("save.stickit", p1, p2, p3, p4);
 
-    /* state */
     int prev_state1 = 0, next_state1 = 0, sx1 = 0;
     int prev_state2 = 0, next_state2 = 0, sx2 = 0;
     int prev_state3 = 0, next_state3 = 0, sx3 = 0;
@@ -28,7 +23,13 @@ main(int argc, char* argv[])
     for (int i = 0; i < 14; i++)
         press_state[i] = 0;
     int cursor_pos = 0, active = 8;
-    char filepath[50];
+    char filepath[50] = "save.stickit";
+
+    note_init(p1);
+    note_init(p2);
+    note_init(p3);
+    note_init(p4);
+    file_load(filepath, p1, p2, p3, p4);
 
     Tigr* screen = tigrWindow(270, 320, "Hello", TIGR_FIXED);
     while (!tigrClosed(screen) && !tigrKeyDown(screen, TK_ESCAPE)) {
@@ -124,6 +125,6 @@ main(int argc, char* argv[])
     }
 
     tigrFree(screen);
-    file_save("save.stickit", p1, p2, p3, p4);
+    file_save(filepath, p1, p2, p3, p4);
     return 0;
 }
