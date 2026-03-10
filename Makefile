@@ -21,3 +21,6 @@ $(TARGET)-debug: main.c tigr/tigr.c
 
 dev: main.c tigr/tigr.c
 	tcc $^ -Os -o $@ $(CFLAGS) $(LDFLAGS) && ./dev
+
+clang-dbg: main.c tigr/tigr.c
+	clang $^ -O3 -s -o $@ $(CFLAGS) $(LDFLAGS)

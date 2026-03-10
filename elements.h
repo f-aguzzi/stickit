@@ -207,4 +207,59 @@ edit_notes(Tigr* bmp, note p[], int sx, int *edit_state, int press_state[], int 
     }
 }
 
+static inline int
+save_menu(Tigr *bmp, char *filepath, int *cursor_pos)
+{
+    char temp[50];
+    int return_value = 0, back_pressed = 0;
+    pressed_buttons pb;
+
+    draw_text(bmp, "SAVE AS...", 100, 45, 1, COL_BORDER);
+    draw_textbox(bmp, filepath, 1, *cursor_pos, 10, 150, 250, 20);
+    back_pressed = draw_button(bmp, "BACK", 20, 35, 40, 30);
+
+    pb.left_pressed = tigrKeyDown(bmp, TK_LEFT);
+    pb.right_pressed = tigrKeyDown(bmp, TK_RIGHT);
+    pb.backspace_pressed = tigrKeyDown(bmp, TK_BACKSPACE);
+    pb.space_pressed = tigrKeyDown(bmp, TK_SPACE);
+    pb.enter_pressed = tigrKeyDown(bmp, TK_PADENTER) || tigrKeyDown(bmp, TK_RETURN);
+    pb.text = tigrReadChar(bmp);
+
+    return_value = read_keys(cursor_pos, pb, filepath, temp);
+
+    if (return_value)
+        return 1;
+    if (back_pressed)
+        return 2;
+    return 0;
+}
+
+static inline int
+load_menu(Tigr *bmp, char *filepath, int *cursor_pos)
+{
+    char temp[50];
+    int return_value = 0, back_pressed = 0;
+    pressed_buttons pb;
+
+    draw_text(bmp, "LOAD FROM...", 100, 45, 1, COL_BORDER);
+    draw_textbox(bmp, filepath, 1, *cursor_pos, 10, 150, 250, 20);
+    back_pressed = draw_button(bmp, "BACK", 20, 35, 40, 30);
+
+    pb.left_pressed = tigrKeyDown(bmp, TK_LEFT);
+    pb.right_pressed = tigrKeyDown(bmp, TK_RIGHT);
+    pb.backspace_pressed = tigrKeyDown(bmp, TK_BACKSPACE);
+    pb.space_pressed = tigrKeyDown(bmp, TK_SPACE);
+    pb.enter_pressed = tigrKeyDown(bmp, TK_PADENTER) || tigrKeyDown(bmp, TK_RETURN);
+    pb.text = tigrReadChar(bmp);
+
+    return_value = read_keys(cursor_pos, pb, filepath, temp);
+
+    if (return_value)
+        return 1;
+    if (back_pressed)
+        return 2;
+
+    return 0;
+}
+
 #endif

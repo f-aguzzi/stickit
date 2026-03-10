@@ -22,33 +22,43 @@ main(int argc, char* argv[])
     int prev_state3 = 0, next_state3 = 0, sx3 = 0;
     int prev_state4 = 0, next_state4 = 0, sx4 = 0;
     int save_state = 0, load_state = 0;
+    int save_as_state = 0, load_from_state = 0;
     int edit1_state = 0, edit2_state = 0, edit3_state = 0, edit4_state = 0;
     int press_state[14];
     for (int i = 0; i < 14; i++)
         press_state[i] = 0;
-    int cursor_pos = 1;
-    int active = 8;
+    int cursor_pos = 0, active = 8;
+    char filepath[50];
 
     Tigr* screen = tigrWindow(270, 320, "Hello", TIGR_FIXED);
     while (!tigrClosed(screen) && !tigrKeyDown(screen, TK_ESCAPE)) {
-        tigrClear(screen, COL_BG);
 
         /* variables */
         int save = 0, load = 0;
+        int save_as = 0, load_from = 0;
         int edit1 = 0, edit2 = 0, edit3 = 0, edit4 = 0;
+        int load_save_return = 0;
+
+        tigrClear(screen, COL_BG);
 
         /* top bar */
         draw_panel(screen, 0, 0, 269, 30);
         save = draw_button(screen, "SAVE", 2, 2, 40, 26);
         load = draw_button(screen, "LOAD", 227, 2, 40, 26);
+        save_as = draw_button(screen, "SAVE AS", 44, 2, 55, 26);
+        load_from = draw_button(screen, "LOAD FROM", 165, 2, 60, 26);
 
-        draw_double_text(screen, "STICKY NOTES", 97, 10, 1);
+        draw_double_text(screen, "STICKIT", 113, 10, 1);
 
         /* click logic */
         if ((save & 1) && !load_state)
             save_state = 1;
         if ((load & 1) && !save_state)
             load_state = 1;
+        if ((save_as & 1) && !load_from_state)
+            save_as_state = 1;
+        if ((load_from & 1) && !save_as_state)
+            load_from_state = 1;
 
         /* lower panel */
         draw_panel(screen, 0, 31, 269, 288);
@@ -58,6 +68,26 @@ main(int argc, char* argv[])
         } else if (save_state) {
             file_save("save.stickit", p1, p2, p3, p4);
             save_state = 0;
+        } else if (save_as_state) {
+            load_save_return = save_menu(screen, filepath, &cursor_pos);
+            if (load_save_return == 1) {
+                file_save(filepath, p1, p2, p3, p4);
+                save_as_state = 0;
+                cursor_pos = 0;
+            } else if (load_save_return == 2) {
+                save_as_state = 0;
+                cursor_pos = 0;
+            }
+        } else if (load_from_state) {
+            load_save_return = load_menu(screen, filepath, &cursor_pos);
+            if (load_save_return == 1) {
+                file_load(filepath, p1, p2, p3, p4);
+                load_from_state = 0;
+                cursor_pos = 0;
+            } else if (load_save_return == 2) {
+                load_from_state = 0;
+                cursor_pos = 0;
+            }
         } else if (edit1_state)
             edit_notes(screen, p1, sx1, &edit1_state, press_state, &cursor_pos, &active);
         else if (edit2_state)
