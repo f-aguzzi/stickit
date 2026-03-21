@@ -1,6 +1,6 @@
 CFLAGS += -I../..
 ifeq ($(OS),Windows_NT)
-	LDFLAGS += \-lopengl32 -lgdi32
+	LDFLAGS += -lopengl32 -lgdi32
 	TARGET = stickit-windows.exe
 else
 	UNAME_S := $(shell uname -s)
