@@ -52,6 +52,7 @@ read_keys(int *cursor_pos, pressed_buttons pb, char *str, char *temp)
 
         int i, split, len = strlen(str);
         split = *cursor_pos > len ? *cursor_pos-1 : *cursor_pos;
+        split = split < 0 ? 0 : split;
 
         for (i = 0; i <= split; i++)
             temp[i] = str[i];

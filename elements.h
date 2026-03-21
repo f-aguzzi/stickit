@@ -171,8 +171,8 @@ edit_menu(Tigr *bmp, note *p, int x_offset, int y_offset, int *press_state, int 
     return 0;
 }
 
-static inline void
-edit_notes(Tigr* bmp, note p[], int sx, int *edit_state, int press_state[], int *cursor_pos, int *active)
+static inline int
+edit_notes(Tigr* bmp, note p[], int sx, int press_state[], int *cursor_pos, int *active)
 {
     note tmp;
     int ret;
@@ -186,7 +186,6 @@ edit_notes(Tigr* bmp, note p[], int sx, int *edit_state, int press_state[], int 
     ret = edit_menu(bmp, &tmp, (270-100)/2, 33, press_state, cursor_pos, active);
     switch(ret) {
         case 1:
-        *edit_state = 0;
         *cursor_pos = 0;
         *active = 8;
         break;
@@ -209,6 +208,8 @@ edit_notes(Tigr* bmp, note p[], int sx, int *edit_state, int press_state[], int 
             *cursor_pos = 0;
         }
     }
+
+    return ret;
 }
 
 static inline int

@@ -5,6 +5,18 @@
 #include "file.h"
 #include "util.h"
 
+enum state {
+    LOAD,
+    SAVE,
+    LOAD_FROM,
+    SAVE_AS,
+    MAIN,
+    EDIT1,
+    EDIT2,
+    EDIT3,
+    EDIT4
+};
+
 int
 main(int argc, char* argv[])
 {
@@ -16,11 +28,11 @@ main(int argc, char* argv[])
     int prev_state2 = 0, next_state2 = 0, sx2 = 0;
     int prev_state3 = 0, next_state3 = 0, sx3 = 0;
     int prev_state4 = 0, next_state4 = 0, sx4 = 0;
-    int save_state = 0, load_state = 0;
-    int save_as_state = 0, load_from_state = 0;
-    int edit1_state = 0, edit2_state = 0, edit3_state = 0, edit4_state = 0;
     int press_state[14];
     int cursor_pos = 0, active = 8;
+
+    enum state state;
+
     char filepath[50] = "save.stickit";
 
     CLEAR_ARRAY(press_state, 14)
@@ -52,51 +64,53 @@ main(int argc, char* argv[])
         draw_double_text(screen, "STICKIT", 113, 10, 1);
 
         /* click logic */
-        if ((save & 1) && !load_state)
-            save_state = 1;
-        if ((load & 1) && !save_state)
-            load_state = 1;
-        if ((save_as & 1) && !load_from_state)
-            save_as_state = 1;
-        if ((load_from & 1) && !save_as_state)
-            load_from_state = 1;
+        if ((save & 1) && state == MAIN)
+            state = SAVE;
+        if ((load & 1) && state == MAIN)
+            state = LOAD;
+        if ((save_as & 1) && state != LOAD_FROM)
+            state = SAVE_AS;
+        if ((load_from & 1) && state != SAVE_AS)
+            state = LOAD_FROM;
 
         /* lower panel */
         draw_panel(screen, 0, 31, 269, 288);
-        if (load_state) {
+
+        /* main loop */
+        if (state == LOAD) {
             file_load("save.stickit", p1, p2, p3, p4);
-            load_state = 0;
-        } else if (save_state) {
+            state = MAIN;
+        } else if (state == SAVE) {
             file_save("save.stickit", p1, p2, p3, p4);
-            save_state = 0;
-        } else if (save_as_state) {
+            state = MAIN;
+        } else if (state == SAVE_AS) {
             load_save_return = save_menu(screen, filepath, &cursor_pos);
             if (load_save_return == 1) {
                 file_save(filepath, p1, p2, p3, p4);
-                save_as_state = 0;
                 cursor_pos = 0;
+                state = MAIN;
             } else if (load_save_return == 2) {
-                save_as_state = 0;
                 cursor_pos = 0;
+                state = MAIN;
             }
-        } else if (load_from_state) {
+        } else if (state == LOAD_FROM) {
             load_save_return = load_menu(screen, filepath, &cursor_pos);
             if (load_save_return == 1) {
                 file_load(filepath, p1, p2, p3, p4);
-                load_from_state = 0;
                 cursor_pos = 0;
+                state = MAIN;
             } else if (load_save_return == 2) {
-                load_from_state = 0;
                 cursor_pos = 0;
+                state = MAIN;
             }
-        } else if (edit1_state)
-            edit_notes(screen, p1, sx1, &edit1_state, press_state, &cursor_pos, &active);
-        else if (edit2_state)
-            edit_notes(screen, p2, sx2, &edit2_state, press_state, &cursor_pos, &active);
-        else if (edit3_state)
-            edit_notes(screen, p3, sx3, &edit3_state, press_state, &cursor_pos, &active);
-        else if (edit4_state)
-            edit_notes(screen, p4, sx4, &edit4_state, press_state, &cursor_pos, &active);
+        } else if (state == EDIT1)
+            edit_notes(screen, p1, sx1, press_state, &cursor_pos, &active) == 1 ? (state = MAIN) : (state = EDIT1);
+        else if (state == EDIT2)
+            edit_notes(screen, p2, sx2, press_state, &cursor_pos, &active) == 1 ? (state = MAIN) : (state = EDIT2);
+        else if (state == EDIT3)
+            edit_notes(screen, p3, sx3, press_state, &cursor_pos, &active) == 1 ? (state = MAIN) : (state = EDIT3);
+        else if (state == EDIT4)
+            edit_notes(screen, p4, sx4, press_state, &cursor_pos, &active) == 1 ? (state = MAIN) : (state = EDIT4);
         else {
             draw_note_panel(screen, p1, &prev_state1, &next_state1, &sx1, 10, 40);
             draw_note_panel(screen, p2, &prev_state2, &next_state2, &sx2, 140, 40);
@@ -110,16 +124,14 @@ main(int argc, char* argv[])
         edit3 = detect_click(screen, 20+sx3*O_NOTE, 100+sx3*O_NOTE, 205-sx3*O_NOTE, 285-sx3*O_NOTE);
         edit4 = detect_click(screen, 150+sx4*O_NOTE, 230+sx4*O_NOTE, 205-sx4*O_NOTE, 285-sx4*O_NOTE);
 
-        int editable = (!(edit1_state || edit2_state || edit3_state || edit4_state));
-
-        if ((edit1 & 1) && editable)
-            edit1_state = 1;
-        if ((edit2 & 1) && editable)
-            edit2_state = 1;
-        if ((edit3 & 1) && editable)
-            edit3_state = 1;
-        if ((edit4 & 1) && editable)
-            edit4_state = 1;
+        if ((edit1 & 1) && state == MAIN)
+            state = EDIT1;
+        if ((edit2 & 1) && state == MAIN)
+            state = EDIT2;
+        if ((edit3 & 1) && state == MAIN)
+            state = EDIT3;
+        if ((edit4 & 1) && state == MAIN)
+            state = EDIT4;
 
         tigrUpdate(screen);
     }
