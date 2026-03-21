@@ -78,10 +78,10 @@ main(int argc, char* argv[])
 
         /* main loop */
         if (state == LOAD) {
-            file_load("save.stickit", p1, p2, p3, p4);
+            file_load(filepath, p1, p2, p3, p4);
             state = MAIN;
         } else if (state == SAVE) {
-            file_save("save.stickit", p1, p2, p3, p4);
+            file_save(filepath, p1, p2, p3, p4);
             state = MAIN;
         } else if (state == SAVE_AS) {
             load_save_return = save_menu(screen, filepath, &cursor_pos);
