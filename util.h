@@ -6,7 +6,7 @@
 
 #define CLEAR_ARRAY(x, len) for(int cla = 0; cla < len; cla++) x[cla] = 0;
 
-inline int
+static inline int
 detect_click(Tigr* bmp, int sx, int dx, int tp, int bm)
 {
     int mx, my, btn;

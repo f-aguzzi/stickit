@@ -58,3 +58,4 @@ dkms.conf
 *.stickit
 stickit-linux-dev
 dev
+debug
