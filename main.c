@@ -77,47 +77,47 @@ main(int argc, char* argv[])
         draw_panel(screen, 0, 31, 269, 288);
 
         /* main loop */
-        if (state == LOAD) {
-            file_load(filepath, p1, p2, p3, p4);
-            state = MAIN;
-        } else if (state == SAVE) {
-            file_save(filepath, p1, p2, p3, p4);
-            state = MAIN;
-        } else if (state == SAVE_AS) {
-            load_save_return = save_menu(screen, filepath, &cursor_pos);
-            if (load_save_return == 1) {
-                file_save(filepath, p1, p2, p3, p4);
-                cursor_pos = 0;
-                state = MAIN;
-            } else if (load_save_return == 2) {
-                cursor_pos = 0;
-                state = MAIN;
-            }
-        } else if (state == LOAD_FROM) {
-            load_save_return = load_menu(screen, filepath, &cursor_pos);
-            if (load_save_return == 1) {
+        switch (state) {
+            case LOAD:
                 file_load(filepath, p1, p2, p3, p4);
-                cursor_pos = 0;
                 state = MAIN;
-            } else if (load_save_return == 2) {
-                cursor_pos = 0;
+                break;
+            case SAVE:
+                file_save(filepath, p1, p2, p3, p4);
                 state = MAIN;
-            }
-        } else if (state == EDIT1)
-            edit_notes(screen, p1, sx1, press_state, &cursor_pos, &active) == 1 ? (state = MAIN) : (state = EDIT1);
-        else if (state == EDIT2)
-            edit_notes(screen, p2, sx2, press_state, &cursor_pos, &active) == 1 ? (state = MAIN) : (state = EDIT2);
-        else if (state == EDIT3)
-            edit_notes(screen, p3, sx3, press_state, &cursor_pos, &active) == 1 ? (state = MAIN) : (state = EDIT3);
-        else if (state == EDIT4)
-            edit_notes(screen, p4, sx4, press_state, &cursor_pos, &active) == 1 ? (state = MAIN) : (state = EDIT4);
-        else {
-            draw_note_panel(screen, p1, &prev_state1, &next_state1, &sx1, 10, 40);
-            draw_note_panel(screen, p2, &prev_state2, &next_state2, &sx2, 140, 40);
-            draw_note_panel(screen, p3, &prev_state3, &next_state3, &sx3, 10, 180);
-            draw_note_panel(screen, p4, &prev_state4, &next_state4, &sx4, 140, 180);
+                break;
+            case SAVE_AS:
+            case LOAD_FROM:
+                load_save_return = state == SAVE_AS ? save_menu(screen, filepath, &cursor_pos) : load_menu(screen, filepath, &cursor_pos);
+                if (load_save_return == 1) {
+                    state == SAVE_AS ? file_save(filepath, p1, p2, p3, p4) : file_load(filepath, p1, p2, p3, p4);
+                    cursor_pos = 0;
+                    state = MAIN;
+                } else if (load_save_return == 2) {
+                    cursor_pos = 0;
+                    state = MAIN;
+                }
+                break;
+            case EDIT1:
+                edit_notes(screen, p1, sx1, press_state, &cursor_pos, &active) == 1 ? (state = MAIN) : (state = EDIT1);
+                break;
+            case EDIT2:
+                edit_notes(screen, p2, sx2, press_state, &cursor_pos, &active) == 1 ? (state = MAIN) : (state = EDIT2);
+                break;
+            case EDIT3:
+                edit_notes(screen, p3, sx3, press_state, &cursor_pos, &active) == 1 ? (state = MAIN) : (state = EDIT3);
+                break;
+            case EDIT4:
+                edit_notes(screen, p4, sx4, press_state, &cursor_pos, &active) == 1 ? (state = MAIN) : (state = EDIT4);
+                break;
+            case MAIN:
+            default:
+                draw_note_panel(screen, p1, &prev_state1, &next_state1, &sx1, 10, 40);
+                draw_note_panel(screen, p2, &prev_state2, &next_state2, &sx2, 140, 40);
+                draw_note_panel(screen, p3, &prev_state3, &next_state3, &sx3, 10, 180);
+                draw_note_panel(screen, p4, &prev_state4, &next_state4, &sx4, 140, 180);
+                break;
         }
-
 
         edit1 = detect_click(screen, 20+sx1*O_NOTE, 100+sx1*O_NOTE, 65-sx1*O_NOTE, 145-sx1*O_NOTE);
         edit2 = detect_click(screen, 150+sx2*O_NOTE, 230+sx2*O_NOTE, 65-sx2*O_NOTE, 145-sx2*O_NOTE);
