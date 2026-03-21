@@ -14,15 +14,15 @@ helper_file_save(FILE *fp, note *p)
 }
 
 void
-file_save(char *filename, note *p1, note *p2, note *p3, note *p4)
+file_save(char *filename, note p[4][10])
 {
     FILE *fp;
     fp = fopen(filename, "w");
 
-    helper_file_save(fp, p1);
-    helper_file_save(fp, p2);
-    helper_file_save(fp, p3);
-    helper_file_save(fp, p4);
+    helper_file_save(fp, p[0]);
+    helper_file_save(fp, p[1]);
+    helper_file_save(fp, p[2]);
+    helper_file_save(fp, p[3]);
 
     fclose(fp);
 }
@@ -44,7 +44,7 @@ helper_file_load(FILE *fp, note *p)
 }
 
 void
-file_load(char *filename, note *p1, note *p2, note *p3, note *p4)
+file_load(char *filename, note p[4][10])
 {
     FILE *fp;
     fp = fopen(filename, "r");
@@ -52,10 +52,10 @@ file_load(char *filename, note *p1, note *p2, note *p3, note *p4)
     if (fp == 0)
         return;
 
-    helper_file_load(fp, p1);
-    helper_file_load(fp, p2);
-    helper_file_load(fp, p3);
-    helper_file_load(fp, p4);
+    helper_file_load(fp, p[0]);
+    helper_file_load(fp, p[1]);
+    helper_file_load(fp, p[2]);
+    helper_file_load(fp, p[3]);
 
     fclose(fp);
 }

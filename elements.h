@@ -48,13 +48,14 @@ typedef struct note_s {
 } note;
 
 void
-note_init(note p[])
+note_init(note p[4][10])
 {
-    for (int i = 0; i < D_NOTE; i++)
-        for (int j = 0; j < H_NOTE; j++) {
-            strcpy(p[i].text[j], "");
-            p[i].bar[j] = 0;
-        }
+    for (int i = 0; i < 4; i++)
+        for (int j = 0; j < D_NOTE; j++)
+            for (int k = 0; k < H_NOTE; k++) {
+                strcpy(p[i][j].text[k], "");
+                p[i][j].bar[k] = 0;
+            }
 }
 
 static void
